@@ -3,9 +3,10 @@ import weatherManager from "./modules/weather";
 import guiManager from "./modules/GUI";
 
 const fetchManager = weatherManager();
-
+const GUI = guiManager();
 // Fetch data and process
 fetchManager.fetchAndProcessWeather();
+GUI.loadGUI();
 
 function addListeners() {
 	const searchButton = document.getElementById("searchButton");
@@ -30,4 +31,4 @@ function searchWeather() {
 	}
 }
 
-addListeners();
+// addListeners();
