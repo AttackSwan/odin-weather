@@ -2,6 +2,7 @@ const defaultLocation = "Melbourne, Australia";
 
 const weatherManager = () => {
 	const forecastData = [];
+	const hourlyData = [];
 	let dailyData;
 
 	class Weather {
@@ -14,8 +15,8 @@ const weatherManager = () => {
 			humidity,
 			iconURL,
 			location,
-			tempC,
-			tempF,
+			temp_c,
+			temp_f,
 			time,
 			wind_kph,
 			wind_mph
@@ -28,8 +29,8 @@ const weatherManager = () => {
 			this.humidity = humidity;
 			this.iconURL = iconURL;
 			this.location = location;
-			this.tempC = tempC;
-			this.tempF = tempF;
+			this.temp_c = temp_c;
+			this.temp_f = temp_f;
 			this.time = time;
 			this.wind_kph = wind_kph;
 			this.wind_mph = wind_mph;
@@ -37,12 +38,28 @@ const weatherManager = () => {
 	}
 
 	class Forecast {
-		constructor(day, temp_highC, temp_highF, temp_lowC, temp_lowF, icon) {
+		constructor(
+			day,
+			temp_high_c,
+			temp_high_f,
+			temp_low_c,
+			temp_low_f,
+			icon
+		) {
 			this.day = day;
-			this.temp_highC = temp_highC;
-			this.temp_highF = temp_highF;
-			this.temp_lowC = temp_lowC;
-			this.temp_lowF = temp_lowF;
+			this.temp_high_c = temp_high_c;
+			this.temp_high_f = temp_high_f;
+			this.temp_low_c = temp_low_c;
+			this.temp_low_f = temp_low_f;
+			this.icon = icon;
+		}
+	}
+
+	class Hourly {
+		constructor(time, temp_c, temp_f, icon) {
+			this.time = time;
+			this.temp_c = temp_c;
+			this.temp_f = temp_f;
 			this.icon = icon;
 		}
 	}
@@ -51,10 +68,14 @@ const weatherManager = () => {
 		try {
 			const fetchedData = await fetchWeather(location);
 			if (fetchedData) {
-				console.log("Fetched data: ", fetchedData);
 				dailyData = processDailyData(fetchedData);
+				processForecastData(fetchedData);
+				processHourlyData(fetchedData);
+
+				console.log("Fetched data: ", fetchedData);
 				console.log(dailyData);
 				console.log(forecastData);
+				console.log("Hourly data: ", hourlyData);
 			} else {
 				console.log("Error: No weather data to process.");
 			}
@@ -118,29 +139,67 @@ const weatherManager = () => {
 				wind_mph
 			);
 
-			// Process forecast data
+			return current_day_data;
+		}
+	}
+
+	function processForecastData(data) {
+		if (!data) {
+			console.log("error: no data to process");
+			return;
+		} else {
 			const { forecast } = data;
 
+			if (!forecast || !Array.isArray(forecast.forecastday)) {
+				console.log("Error: Forecast data is not available.");
+				return;
+			}
+
+			// Process forecast data
 			forecast.forecastday.forEach((day) => {
 				const forecastDate = day.date;
-				const maxtempC = day.day.maxtemp_c;
-				const maxtempF = day.day.maxtemp_f;
-				const mintempC = day.day.mintemp_c;
-				const mintempF = day.day.mintemp_f;
+				const maxtemp_c = day.day.maxtemp_c;
+				const maxtemp_f = day.day.maxtemp_f;
+				const mintemp_c = day.day.mintemp_c;
+				const mintemp_f = day.day.mintemp_f;
 				const dailyIcon = day.day.condition.icon;
 
 				const dailyForecastData = new Forecast(
 					forecastDate,
-					maxtempC,
-					maxtempF,
-					mintempC,
-					mintempF,
+					maxtemp_c,
+					maxtemp_f,
+					mintemp_c,
+					mintemp_f,
 					dailyIcon
 				);
 				forecastData.push(dailyForecastData);
 			});
+		}
+	}
 
-			return current_day_data;
+	function processHourlyData(data) {
+		// 7 lots of data @ every 3 hours
+
+		if (!data) {
+			console.log("error: no data to process");
+			return;
+		} else {
+			const hourData = data.forecast.forecastday[0].hour;
+
+			if (!hourData || !Array.isArray(hourData)) {
+				console.log("Error: Forecast data is not available.");
+				return;
+			}
+
+			for (let i = 0; i < 24; i += 3) {
+				const hour = hourData[i].time;
+				const temp_c = hourData[i].temp_c;
+				const temp_f = hourData[i].temp_f;
+				const icon = hourData[i].condition.icon;
+
+				const newHour = new Hourly(hour, temp_c, temp_f, icon);
+				hourlyData.push(newHour);
+			}
 		}
 	}
 
