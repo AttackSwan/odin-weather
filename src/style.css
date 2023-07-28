@@ -1,3 +1,11 @@
+:root {
+	--color-white: #fafafa;
+}
+
+* {
+	box-sizing: border-box;
+}
+
 body {
 	height: 100vh;
 	width: 100vw;
@@ -5,14 +13,43 @@ body {
 }
 
 .content {
-	height: 100%;
-	width: 100%;
+	align-items: center;
 	background-image: url("./images/background.jpg");
 	background-position: -300px;
 	background-size: cover;
 	display: flex;
-	justify-content: center;
-	align-items: center;
+	flex-direction: column;
+	height: 100%;
+	padding: 24px;
+	width: 100%;
+}
+
+.daily {
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	color: var(--color-white);
+	margin-bottom: 24px;
+}
+
+.daily_stats {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.current_temperature {
+	font-size: 2.5rem;
+	font-weight: 800;
+}
+
+.air_details {
+	display: flex;
+	margin-bottom: 8px;
+}
+
+.air_icon img {
+	height: 30px;
 }
 
 .search {

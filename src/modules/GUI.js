@@ -1,5 +1,9 @@
-import { createDiv, createButton } from "./utility.js";
+import { createDiv, createButton, createDetails } from "./utility.js";
 import { format, parse } from "date-fns";
+import feelsLikeSVG from "./SVGs/feelsLike.svg";
+import humiditySVG from "./SVGs/humidity.svg";
+import chanceRainSVG from "./SVGs/chanceRain.svg";
+import windSpeedSVG from "./SVGs/windSpeed.svg";
 
 const guiManager = () => {
 	const content = document.querySelector(".content");
@@ -19,7 +23,7 @@ const guiManager = () => {
 
 		const inputDiv = createDiv("search_input");
 		const searchInput = document.createElement("input");
-		const searchButton = document.createElement("button");
+		const searchButton = createButton("searchButton", "Search!");
 		searchButton.id = "searchButton";
 		const searchIcon = createDiv("searchIcon");
 		inputDiv.append(searchInput, searchButton, searchIcon);
@@ -34,7 +38,7 @@ const guiManager = () => {
 	}
 
 	function addDailyStats(container) {
-		const dailyStats = createDiv("dailyStats");
+		const daily = createDiv("daily");
 
 		const leftdiv = createDiv("daily_stats");
 		const rightdiv = createDiv("airDetails");
@@ -42,25 +46,44 @@ const guiManager = () => {
 		const temp = createDiv("current_temperature");
 		const name = createDiv("current_location");
 		const time = createDiv("current_time");
-
-		const conditions = createDiv("current_conditions");
 		const icon = createDiv("current_icon");
-		const feelsLike = createDiv("current_feels_like");
-		const humidity = createDiv("current_humidity");
-		const chanceRain = createDiv("chance_of_rain");
-		const wind = createDiv("current_wind_speed");
 
-		leftdiv.append(temp, name, time);
-		rightdiv.append(
-			conditions,
-			icon,
-			feelsLike,
-			humidity,
-			chanceRain,
-			wind
+		const conditions = createDetails(
+			"current_conditions",
+			"Conditions",
+			feelsLikeSVG
 		);
-		dailyStats.append(leftdiv, rightdiv);
-		container.appendChild(dailyStats);
+		const feelsLike = createDetails(
+			"current_feels_like",
+			"Feels Like",
+			feelsLikeSVG
+		);
+		const humidity = createDetails(
+			"current_humidity",
+			"Humidity",
+			humiditySVG
+		);
+		const chanceRain = createDetails(
+			"chance_of_rain",
+			"Chance of Rain",
+			chanceRainSVG
+		);
+		const wind = createDetails(
+			"current_wind_speed",
+			"Wind Speed",
+			windSpeedSVG
+		);
+
+		// const conditions = createDiv("current_conditions");
+		// const feelsLike = createDiv("current_feels_like");
+		// const humidity = createDiv("current_humidity");
+		// const chanceRain = createDiv("chance_of_rain");
+		// const wind = createDiv("current_wind_speed");
+
+		leftdiv.append(temp, name, time, icon);
+		rightdiv.append(conditions, feelsLike, humidity, chanceRain, wind);
+		daily.append(leftdiv, rightdiv);
+		container.appendChild(daily);
 	}
 
 	function fillData(dailyData, forecastData, hourlyData) {
@@ -69,6 +92,7 @@ const guiManager = () => {
 	}
 
 	function fillDailyStats(data) {
+		console.log("daily data: ", data);
 		const current_temperature = document.querySelector(
 			".current_temperature"
 		);
@@ -80,35 +104,45 @@ const guiManager = () => {
 
 		const time_string = data.time;
 		const date = parse(time_string, "yyyy-MM-dd HH:mm", new Date());
-		const formatted_time = format(date, "HH:mm");
+		const formatted_time = format(date, "h:mm a");
 		current_time.textContent = formatted_time;
+
+		const current_icon = document.querySelector(".current_icon");
+		current_icon.innerHTML = "";
+		const icon = new Image();
+		icon.src = data.iconURL;
+		current_icon.appendChild(icon);
 	}
 
 	function fillAirDetails(data) {
-		const current_conditions = document.querySelector(
-			".current_conditions"
+		const current_conditions_text = document.querySelector(
+			".current_conditions .air_text"
 		);
-		const current_icon = document.querySelector(".current_icon");
-		const current_feels_like = document.querySelector(
-			".current_feels_like"
+		current_conditions_text.textContent = data.condition;
+
+		const current_feels_like_text = document.querySelector(
+			".current_feels_like .air_text"
 		);
-		const current_humidity = document.querySelector(".current_humidity");
-		const chance_of_rain = document.querySelector(".chance_of_rain");
-		const current_wind_speed = document.querySelector(
-			".current_wind_speed"
+		const current_humidity_text = document.querySelector(
+			".current_humidity .air_text"
+		);
+		const chance_of_rain_text = document.querySelector(
+			".chance_of_rain .air_text"
+		);
+		const current_wind_speed_text = document.querySelector(
+			".current_wind_speed .air_text"
 		);
 
-		current_conditions.textContent = data.condition;
 		if ((units = "C")) {
-			current_feels_like.textContent = `${data.feelsLikeC} ° ${units} `;
-			current_wind_speed.textContent = `${data.wind_kph} kph`;
+			current_feels_like_text.textContent = `${data.feelsLikeC} °${units} `;
+			current_wind_speed_text.textContent = `${data.wind_kph} kph`;
 		} else if ((units = "F")) {
-			current_feels_like.textContent = `${data.feelsLikeF} ° ${units}`;
-			current_wind_speed.textContent = `${data.wind_mph} mph`;
+			current_feels_like_text.textContent = `${data.feelsLikeF} °${units}`;
+			current_wind_speed_text.textContent = `${data.wind_mph} mph`;
 		}
 
-		current_humidity.textContent = `${data.humidity} %`;
-		chance_of_rain.textContent = `${data.daily_chance_of_rain} %`;
+		current_humidity_text.textContent = `${data.humidity} %`;
+		chance_of_rain_text.textContent = `${data.daily_chance_of_rain} %`;
 	}
 
 	return { fillData, loadGUI };

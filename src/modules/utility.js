@@ -11,4 +11,23 @@ const createButton = (className, buttonText) => {
 	return button;
 };
 
-export { createDiv, createButton };
+const createDetails = (className, caption, iconURL) => {
+	const container = createDiv("air_details");
+	const iconDiv = createDiv("air_icon");
+	const detailsDiv = createDiv("air_RHS");
+	const captionDiv = createDiv("air_caption");
+	captionDiv.textContent = caption;
+	const text = createDiv("air_text");
+
+	detailsDiv.append(caption, text);
+	container.append(iconDiv, detailsDiv);
+	container.classList.add(className);
+
+	const icon = new Image();
+	icon.src = iconURL;
+	iconDiv.appendChild(icon);
+
+	return container;
+};
+
+export { createDiv, createButton, createDetails };
