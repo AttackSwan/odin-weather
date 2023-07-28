@@ -2,33 +2,45 @@ import "./style.css";
 import weatherManager from "./modules/weather";
 import guiManager from "./modules/GUI";
 
-const fetchManager = weatherManager();
-const GUI = guiManager();
-// Fetch data and process
-fetchManager.fetchAndProcessWeather();
-GUI.loadGUI();
+const load = (async () => {
+	const fetchManager = weatherManager();
+	const GUI = guiManager();
 
-function addListeners() {
-	const searchButton = document.getElementById("searchButton");
-	const searchInput = document.querySelector("input");
+	// Fetch data and process
+	GUI.loadGUI();
+	addListeners();
+	await fetchManager.fetchAndProcessWeather();
+	fillGUIdetails();
 
-	searchButton.addEventListener("click", searchWeather);
-	searchInput.addEventListener("keyup", (e) => {
-		if (e.key === "Enter") {
-			searchButton.click();
-		}
-	});
-}
+	function addListeners() {
+		const searchButton = document.getElementById("searchButton");
+		const searchInput = document.querySelector("input");
 
-function searchWeather() {
-	const searchInput = document.querySelector("input");
-	const searchQuery = searchInput.value;
-
-	if (searchQuery === "") {
-		console.log("Error: search blank");
-	} else {
-		fetchManager.fetchAndProcessWeather(searchQuery);
+		searchButton.addEventListener("click", searchWeather);
+		searchInput.addEventListener("keyup", (e) => {
+			if (e.key === "Enter") {
+				searchButton.click();
+			}
+		});
 	}
-}
 
-// addListeners();
+	async function searchWeather() {
+		const searchInput = document.querySelector("input");
+		const searchQuery = searchInput.value;
+
+		if (searchQuery === "") {
+			console.log("Error: search blank");
+		} else {
+			await fetchManager.fetchAndProcessWeather(searchQuery);
+			fillGUIdetails();
+		}
+	}
+
+	function fillGUIdetails() {
+		const dailyData = fetchManager.getData("daily");
+		const hourlyData = fetchManager.getData("hourly");
+		const forecastData = fetchManager.getData("forecast");
+
+		GUI.fillData(dailyData, forecastData, hourlyData);
+	}
+})();

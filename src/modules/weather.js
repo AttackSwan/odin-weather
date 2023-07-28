@@ -70,7 +70,6 @@ const weatherManager = () => {
 				dailyData = processDailyData(fetchedData);
 				processForecastData(fetchedData);
 				processHourlyData(fetchedData);
-
 				console.log("Fetched data: ", fetchedData);
 				console.log(dailyData);
 				console.log(forecastData);
@@ -201,10 +200,23 @@ const weatherManager = () => {
 		}
 	}
 
-	// fetchAndProcessWeather();
+	function getData(type) {
+		switch (type) {
+			case "daily":
+				return dailyData;
+			case "hourly":
+				return hourlyData;
+			case "forecast":
+				return forecastData;
+			default:
+				console.log("Error: data not retrieved.");
+				return null;
+		}
+	}
 
 	return {
 		fetchAndProcessWeather,
+		getData,
 	};
 };
 
