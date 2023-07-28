@@ -1,6 +1,5 @@
-const defaultLocation = "Melbourne, Australia";
-
 const weatherManager = () => {
+	const defaultLocation = "Melbourne, Australia";
 	const forecastData = [];
 	const hourlyData = [];
 	let dailyData;
@@ -179,7 +178,6 @@ const weatherManager = () => {
 
 	function processHourlyData(data) {
 		// 7 lots of data @ every 3 hours
-
 		if (!data) {
 			console.log("error: no data to process");
 			return;
@@ -203,7 +201,11 @@ const weatherManager = () => {
 		}
 	}
 
-	fetchAndProcessWeather();
+	// fetchAndProcessWeather();
+
+	return {
+		fetchAndProcessWeather,
+	};
 };
 
 export default weatherManager;
