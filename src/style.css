@@ -29,7 +29,7 @@ body {
 	width: 100%;
 	justify-content: space-between;
 	color: var(--color-white);
-	margin-bottom: 24px;
+	margin-bottom: 8px;
 }
 
 .daily_stats {
@@ -83,21 +83,51 @@ body {
 }
 
 .search {
-	height: 30%;
-	width: 75%;
-	border: 1px solid white;
-	display: flex;
 	align-items: center;
+	display: flex;
+	flex-direction: column;
 	justify-content: center;
+	width: 100%;
 }
 
-input {
-	width: 100%;
+.search_input {
+	align-items: center;
+	border: 3px solid var(--color-white);
+	border-radius: 15px;
+	display: flex;
+	margin-top: 16px;
+	padding: 8px;
+}
+
+.search_input input {
+	background: none;
+	border: none;
+	color: var(--color-white);
+	font-size: 1rem;
+	height: 1.5rem;
+	outline: none;
+}
+
+.search_input img {
 	height: 30px;
 }
 
+::placeholder {
+	color: var(--color-white);
+	font-size: 1rem;
+}
+
+.temperature_buttons {
+	display: flex;
+}
+
+input {
+	height: 30px;
+	width: 100%;
+}
+
 button {
-	height: 50px;
-	width: 100px;
 	border-radius: 15px;
+	height: 25px;
+	width: 100px;
 }

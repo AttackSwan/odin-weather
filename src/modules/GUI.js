@@ -1,39 +1,50 @@
 import { createDiv, createButton, createDetails } from "./utility.js";
 import { format, parse } from "date-fns";
+import weatherManager from "./weather";
+// Icons
 import feelsLikeSVG from "./SVGs/feelsLike.svg";
 import humiditySVG from "./SVGs/humidity.svg";
 import chanceRainSVG from "./SVGs/chanceRain.svg";
 import windSpeedSVG from "./SVGs/windSpeed.svg";
+import searchSVG from "./SVGs/search.svg";
 
 const guiManager = () => {
 	const content = document.querySelector(".content");
 	let units = "C";
 
-	function loadGUI() {
+	const fetchManager = weatherManager();
+
+	async function loadGUI() {
 		addDailyStats(content);
 		addSearchDiv(content);
 		const hoursDiv = createDiv("hours");
 		const forecastDiv = createDiv("forecast");
 
 		content.append(hoursDiv, forecastDiv);
+
+		await fetchManager.fetchAndProcessWeather();
+		addListeners();
+		fillDetails();
 	}
 
 	function addSearchDiv(container) {
 		const search = createDiv("search");
-
 		const inputDiv = createDiv("search_input");
+
 		const searchInput = document.createElement("input");
-		const searchButton = createButton("searchButton", "Search!");
-		searchButton.id = "searchButton";
-		const searchIcon = createDiv("searchIcon");
-		inputDiv.append(searchInput, searchButton, searchIcon);
+		searchInput.type = "text";
+		searchInput.placeholder = "Search Location...";
+
+		const searchIcon = new Image();
+		searchIcon.src = searchSVG;
 
 		const buttons = createDiv("temperature_buttons");
-		const buttonC = createButton("temp_button", "Celcius");
-		const buttonF = createButton("temp_button", "Fahrenheit");
+		const buttonC = createButton("temp_button_c", "Celcius");
+		const buttonF = createButton("temp_button_f", "Fahrenheit");
 		buttons.append(buttonC, buttonF);
 
-		search.append(inputDiv, buttons);
+		inputDiv.append(searchInput, searchIcon);
+		search.append(buttons, inputDiv);
 		container.appendChild(search);
 	}
 
@@ -76,9 +87,48 @@ const guiManager = () => {
 		container.appendChild(daily);
 	}
 
-	function fillData(dailyData, forecastData, hourlyData) {
+	function addListeners() {
+		const searchInput = document.querySelector("input");
+		const searchIcon = document.querySelector(".search_input img");
+		const temp_button_c = document.querySelector(".temp_button_c");
+		const temp_button_f = document.querySelector(".temp_button_f");
+
+		searchIcon.addEventListener("click", searchWeather);
+		searchInput.addEventListener("keyup", (e) => {
+			if (e.key === "Enter") {
+				searchIcon.click();
+			}
+		});
+		temp_button_c.addEventListener("click", () => {
+			changeUnits("C");
+		});
+		temp_button_f.addEventListener("click", () => {
+			changeUnits("F");
+		});
+	}
+
+	function fillDetails() {
+		const dailyData = fetchManager.getData("daily");
+		const hourlyData = fetchManager.getData("hourly");
+		const forecastData = fetchManager.getData("forecast");
+
 		fillDailyStats(dailyData);
 		fillAirDetails(dailyData);
+	}
+
+	async function searchWeather() {
+		const searchInput = document.querySelector("input");
+		const searchQuery = searchInput.value;
+
+		//Clear search input
+		searchInput.value = "";
+
+		if (searchQuery === "") {
+			console.log("Error: search blank");
+		} else {
+			await fetchManager.fetchAndProcessWeather(searchQuery);
+			fillDetails();
+		}
 	}
 
 	function fillDailyStats(data) {
@@ -92,7 +142,11 @@ const guiManager = () => {
 			".current_conditions"
 		);
 
-		current_temperature.textContent = `${data.temp_c} ° ${units}`;
+		if (units === "C") {
+			current_temperature.textContent = `${data.temp_c} ° ${units}`;
+		} else if (units === "F") {
+			current_temperature.textContent = `${data.temp_f} ° ${units}`;
+		}
 		current_location.textContent = data.location;
 		current_conditions.textContent = data.condition;
 
@@ -122,10 +176,10 @@ const guiManager = () => {
 			".current_wind_speed .air_text"
 		);
 
-		if ((units = "C")) {
+		if (units === "C") {
 			current_feels_like_text.textContent = `${data.feelsLikeC} °${units} `;
 			current_wind_speed_text.textContent = `${data.wind_kph} kph`;
-		} else if ((units = "F")) {
+		} else if (units === "F") {
 			current_feels_like_text.textContent = `${data.feelsLikeF} °${units}`;
 			current_wind_speed_text.textContent = `${data.wind_mph} mph`;
 		}
@@ -134,7 +188,14 @@ const guiManager = () => {
 		chance_of_rain_text.textContent = `${data.daily_chance_of_rain} %`;
 	}
 
-	return { fillData, loadGUI };
+	function changeUnits(newUnit) {
+		if (newUnit !== units) {
+			units = newUnit;
+			fillDetails();
+		}
+	}
+
+	return { loadGUI };
 };
 
 export default guiManager;
