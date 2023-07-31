@@ -43,13 +43,43 @@ body {
 	font-weight: 800;
 }
 
+.current_location {
+	font-weight: 800;
+}
+
+.current_time,
+.current_conditions {
+	font-size: 0.9rem;
+}
+
+.current_icon img {
+	height: 65px;
+}
+
+.AQI {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+}
+
 .air_details {
+	align-items: center;
 	display: flex;
 	margin-bottom: 8px;
 }
 
 .air_icon img {
-	height: 30px;
+	height: 25px;
+	margin-right: 8px;
+}
+
+.air_caption {
+	font-size: 0.75rem;
+}
+
+.air_text {
+	font-size: 0.9rem;
+	font-weight: 800;
 }
 
 .search {

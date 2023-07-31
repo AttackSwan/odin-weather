@@ -19,7 +19,7 @@ const createDetails = (className, caption, iconURL) => {
 	captionDiv.textContent = caption;
 	const text = createDiv("air_text");
 
-	detailsDiv.append(caption, text);
+	detailsDiv.append(captionDiv, text);
 	container.append(iconDiv, detailsDiv);
 	container.classList.add(className);
 

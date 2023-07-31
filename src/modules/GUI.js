@@ -41,18 +41,14 @@ const guiManager = () => {
 		const daily = createDiv("daily");
 
 		const leftdiv = createDiv("daily_stats");
-		const rightdiv = createDiv("airDetails");
+		const rightdiv = createDiv("AQI");
 
 		const temp = createDiv("current_temperature");
 		const name = createDiv("current_location");
 		const time = createDiv("current_time");
 		const icon = createDiv("current_icon");
+		const conditions = createDiv("current_conditions");
 
-		const conditions = createDetails(
-			"current_conditions",
-			"Conditions",
-			feelsLikeSVG
-		);
 		const feelsLike = createDetails(
 			"current_feels_like",
 			"Feels Like",
@@ -74,14 +70,8 @@ const guiManager = () => {
 			windSpeedSVG
 		);
 
-		// const conditions = createDiv("current_conditions");
-		// const feelsLike = createDiv("current_feels_like");
-		// const humidity = createDiv("current_humidity");
-		// const chanceRain = createDiv("chance_of_rain");
-		// const wind = createDiv("current_wind_speed");
-
-		leftdiv.append(temp, name, time, icon);
-		rightdiv.append(conditions, feelsLike, humidity, chanceRain, wind);
+		leftdiv.append(temp, name, time, conditions, icon);
+		rightdiv.append(feelsLike, humidity, chanceRain, wind);
 		daily.append(leftdiv, rightdiv);
 		container.appendChild(daily);
 	}
@@ -98,9 +88,13 @@ const guiManager = () => {
 		);
 		const current_time = document.querySelector(".current_time");
 		const current_location = document.querySelector(".current_location");
+		const current_conditions = document.querySelector(
+			".current_conditions"
+		);
 
 		current_temperature.textContent = `${data.temp_c} ° ${units}`;
 		current_location.textContent = data.location;
+		current_conditions.textContent = data.condition;
 
 		const time_string = data.time;
 		const date = parse(time_string, "yyyy-MM-dd HH:mm", new Date());
@@ -115,11 +109,6 @@ const guiManager = () => {
 	}
 
 	function fillAirDetails(data) {
-		const current_conditions_text = document.querySelector(
-			".current_conditions .air_text"
-		);
-		current_conditions_text.textContent = data.condition;
-
 		const current_feels_like_text = document.querySelector(
 			".current_feels_like .air_text"
 		);
