@@ -18,6 +18,7 @@ const guiManager = () => {
 	const number_of_hours = 8;
 
 	let units = "C";
+	let forecast = "daily"; // Daily forecast as default rather than hourly
 
 	const fetchManager = weatherManager();
 
@@ -131,6 +132,7 @@ const guiManager = () => {
 			hourlyForecast.appendChild(hour);
 		}
 
+		hourlyForecast.classList.add("hidden");
 		container.append(hourlyForecast);
 	}
 
@@ -162,6 +164,8 @@ const guiManager = () => {
 		const searchIcon = document.querySelector(".search_input img");
 		const temp_button_c = document.querySelector(".temp_button_c");
 		const temp_button_f = document.querySelector(".temp_button_f");
+		const daily = document.querySelector(".footer_daily");
+		const hourly = document.querySelector(".footer_hourly");
 
 		searchIcon.addEventListener("click", searchWeather);
 		searchInput.addEventListener("keyup", (e) => {
@@ -175,6 +179,23 @@ const guiManager = () => {
 		temp_button_f.addEventListener("click", () => {
 			changeUnits("F");
 		});
+		daily.addEventListener("click", () => {
+			changeForecast("daily");
+		});
+		hourly.addEventListener("click", () => {
+			changeForecast("hourly");
+		});
+	}
+
+	function changeForecast(newForecast) {
+		const dailyForecast = document.querySelector(".forecast_daily");
+		const hourlyForecast = document.querySelector(".forecast_hourly");
+
+		if (newForecast !== forecast) {
+			dailyForecast.classList.toggle("hidden", newForecast !== "daily");
+			hourlyForecast.classList.toggle("hidden", newForecast !== "hourly");
+			forecast = newForecast;
+		}
 	}
 
 	function fillDetails() {
