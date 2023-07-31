@@ -7,6 +7,8 @@ import humiditySVG from "./SVGs/humidity.svg";
 import chanceRainSVG from "./SVGs/chanceRain.svg";
 import windSpeedSVG from "./SVGs/windSpeed.svg";
 import searchSVG from "./SVGs/search.svg";
+import dailySVG from "./SVGs/daily.svg";
+import hourlySVG from "./SVGs/hourly.svg";
 
 const guiManager = () => {
 	const content = document.querySelector(".content");
@@ -15,15 +17,15 @@ const guiManager = () => {
 	const fetchManager = weatherManager();
 
 	async function loadGUI() {
-		addDailyStats(content);
 		addSearchDiv(content);
-		const hoursDiv = createDiv("hours");
-		const forecastDiv = createDiv("forecast");
-
-		content.append(hoursDiv, forecastDiv);
+		addDailyStats(content);
+		addUnitsDiv(content);
+		addDailyForecastDiv(content);
+		addHourlyForecastDiv(content);
+		addFooter(content);
+		addListeners();
 
 		await fetchManager.fetchAndProcessWeather();
-		addListeners();
 		fillDetails();
 	}
 
@@ -38,13 +40,8 @@ const guiManager = () => {
 		const searchIcon = new Image();
 		searchIcon.src = searchSVG;
 
-		const buttons = createDiv("temperature_buttons");
-		const buttonC = createButton("temp_button_c", "Celcius");
-		const buttonF = createButton("temp_button_f", "Fahrenheit");
-		buttons.append(buttonC, buttonF);
-
 		inputDiv.append(searchInput, searchIcon);
-		search.append(buttons, inputDiv);
+		search.append(inputDiv);
 		container.appendChild(search);
 	}
 
@@ -85,6 +82,76 @@ const guiManager = () => {
 		rightdiv.append(feelsLike, humidity, chanceRain, wind);
 		daily.append(leftdiv, rightdiv);
 		container.appendChild(daily);
+	}
+
+	function addUnitsDiv(container) {
+		const buttons = createDiv("temperature_buttons");
+		const buttonC = createButton("temp_button_c", "Celsius");
+		const buttonF = createButton("temp_button_f", "Fahrenheit");
+		buttons.append(buttonC, buttonF);
+		container.appendChild(buttons);
+	}
+
+	function addDailyForecastDiv(container) {
+		const number_of_days = 3;
+		const dailyForecast = createDiv("forecast_daily");
+
+		for (let i = 0; i < number_of_days; i++) {
+			const day = createDiv("forecast_daily_day");
+			const name = createDiv("forecast_day_name");
+			const temp = createDiv("forecast_daily_temp_div");
+			const temp_high = createDiv("forecast_daily_temp_high");
+			const temp_low = createDiv("forecast_daily_temp_low");
+			const icon = createDiv("forecast_daily_icon");
+
+			temp.append(temp_high, temp_low);
+			day.append(name, temp, icon);
+			day.setAttribute("data-day", i + 1);
+			dailyForecast.appendChild(day);
+		}
+
+		container.append(dailyForecast);
+	}
+
+	function addHourlyForecastDiv(container) {
+		const number_of_hours = 7;
+		const hourlyForecast = createDiv("forecast_hourly");
+
+		for (let i = 0; i < number_of_hours; i++) {
+			const hour = createDiv("forecast_hourly_hour");
+			const time = createDiv("forecast_hourly_time");
+			const temp = createDiv("forecast_hourly_temp");
+			const icon = createDiv("forecast_hourly_icon");
+
+			hour.setAttribute("data-hour", i + 1);
+			hour.append(time, temp, icon);
+			hourlyForecast.appendChild(hour);
+		}
+
+		container.append(hourlyForecast);
+	}
+
+	function addFooter(container) {
+		const footer = createDiv("footer");
+
+		const daily = createDiv("footer_daily");
+		const hourly = createDiv("footer_hourly");
+
+		const dailyIcon = new Image();
+		dailyIcon.src = dailySVG;
+		const hourlyIcon = new Image();
+		hourlyIcon.src = hourlySVG;
+
+		const dailyText = createDiv("footer_daily_text");
+		const hourlyText = createDiv("footer_hourly_text");
+
+		dailyText.textContent = "Daily Forecast";
+		hourlyText.textContent = "Hourly Forecast";
+
+		daily.append(dailyIcon, dailyText);
+		hourly.append(hourlyIcon, hourlyText);
+		footer.append(daily, hourly);
+		container.appendChild(footer);
 	}
 
 	function addListeners() {

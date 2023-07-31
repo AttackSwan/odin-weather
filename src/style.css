@@ -95,8 +95,8 @@ body {
 	border: 3px solid var(--color-white);
 	border-radius: 15px;
 	display: flex;
-	margin-top: 16px;
 	padding: 8px;
+	margin-bottom: 16px;
 }
 
 .search_input input {
