@@ -12,6 +12,11 @@ import hourlySVG from "./SVGs/hourly.svg";
 
 const guiManager = () => {
 	const content = document.querySelector(".content");
+
+	// Forecast data range
+	const number_of_days = 3;
+	const number_of_hours = 8;
+
 	let units = "C";
 
 	const fetchManager = weatherManager();
@@ -93,7 +98,6 @@ const guiManager = () => {
 	}
 
 	function addDailyForecastDiv(container) {
-		const number_of_days = 3;
 		const dailyForecast = createDiv("forecast_daily");
 
 		for (let i = 0; i < number_of_days; i++) {
@@ -114,7 +118,6 @@ const guiManager = () => {
 	}
 
 	function addHourlyForecastDiv(container) {
-		const number_of_hours = 7;
 		const hourlyForecast = createDiv("forecast_hourly");
 
 		for (let i = 0; i < number_of_hours; i++) {
@@ -176,11 +179,13 @@ const guiManager = () => {
 
 	function fillDetails() {
 		const dailyData = fetchManager.getData("daily");
-		const hourlyData = fetchManager.getData("hourly");
-		const forecastData = fetchManager.getData("forecast");
+		const forecastHourlyData = fetchManager.getData("hourly");
+		const forecastDailyData = fetchManager.getData("forecast");
 
 		fillDailyStats(dailyData);
 		fillAirDetails(dailyData);
+		fillForecastDaily(forecastDailyData);
+		fillForecastHourly(forecastHourlyData);
 	}
 
 	async function searchWeather() {
@@ -210,9 +215,9 @@ const guiManager = () => {
 		);
 
 		if (units === "C") {
-			current_temperature.textContent = `${data.temp_c} ° ${units}`;
+			current_temperature.textContent = `${data.temp_c} °${units}`;
 		} else if (units === "F") {
-			current_temperature.textContent = `${data.temp_f} ° ${units}`;
+			current_temperature.textContent = `${data.temp_f} °${units}`;
 		}
 		current_location.textContent = data.location;
 		current_conditions.textContent = data.condition;
@@ -253,6 +258,68 @@ const guiManager = () => {
 
 		current_humidity_text.textContent = `${data.humidity} %`;
 		chance_of_rain_text.textContent = `${data.daily_chance_of_rain} %`;
+	}
+
+	function fillForecastDaily(data) {
+		for (let i = 0; i < number_of_days; i++) {
+			const dailyData = data[i];
+			const dayDiv = document.querySelector(`[data-day="${i + 1}"]`);
+
+			const name = dayDiv.querySelector(".forecast_day_name");
+			const temp_high = dayDiv.querySelector(".forecast_daily_temp_high");
+			const temp_low = dayDiv.querySelector(".forecast_daily_temp_low");
+			const iconDiv = dayDiv.querySelector(".forecast_daily_icon");
+
+			const nameString = dailyData.day;
+			const dateObject = parse(nameString, "yyyy-MM-dd", new Date());
+			const dayName = format(dateObject, "EEEE");
+
+			name.textContent = dayName;
+			if (units === "C") {
+				temp_high.textContent = `${dailyData.temp_high_c} °${units}`;
+				temp_low.textContent = `${dailyData.temp_low_c} °${units}`;
+			} else {
+				temp_high.textContent = `${dailyData.temp_high_f} °${units}`;
+				temp_low.textContent = `${dailyData.temp_low_f} °${units}`;
+			}
+
+			const icon = new Image();
+			icon.src = dailyData.icon;
+			iconDiv.innerHTML = "";
+			iconDiv.appendChild(icon);
+		}
+	}
+
+	function fillForecastHourly(data) {
+		console.log("Data in: ", data);
+		for (let i = 0; i < number_of_hours; i++) {
+			const hourlyData = data[i];
+			const hourDiv = document.querySelector(`[data-hour="${i + 1}"]`);
+
+			const time = hourDiv.querySelector(".forecast_hourly_time");
+			const temp = hourDiv.querySelector(".forecast_hourly_temp");
+			const iconDiv = hourDiv.querySelector(".forecast_hourly_icon");
+
+			const timeString = hourlyData.time;
+			const dateObject = parse(
+				timeString,
+				"yyyy-MM-dd HH:mm",
+				new Date()
+			);
+			const twelveHourTime = format(dateObject, "h a");
+
+			time.textContent = twelveHourTime;
+			if (units === "C") {
+				temp.textContent = `${hourlyData.temp_c} °${units}`;
+			} else {
+				temp.textContent = `${hourlyData.temp_f} °${units}`;
+			}
+
+			const icon = new Image();
+			icon.src = hourlyData.icon;
+			iconDiv.innerHTML = "";
+			iconDiv.appendChild(icon);
+		}
 	}
 
 	function changeUnits(newUnit) {
