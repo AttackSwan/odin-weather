@@ -26,11 +26,14 @@ body {
 }
 
 .daily {
-	display: flex;
-	width: 100%;
-	justify-content: space-between;
+	background-color: rgba(0, 0, 0, 0.3);
+	border-radius: 15px;
 	color: var(--color-white);
+	display: flex;
+	justify-content: space-between;
 	margin-bottom: 8px;
+	width: 100%;
+	padding: 4px;
 }
 
 .daily_stats {
@@ -120,6 +123,9 @@ body {
 
 .temperature_buttons {
 	display: flex;
+	justify-content: space-around;
+	margin-top: 16px;
+	width: 100%;
 }
 
 input {
@@ -127,17 +133,15 @@ input {
 	width: 100%;
 }
 
-button {
-	border-radius: 15px;
-	height: 25px;
-	width: 100px;
-}
-
 .forecast_daily {
+	background-color: rgba(0, 0, 0, 0.3);
+	border-radius: 15px;
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
-	padding-top: 24px;
+	padding: 4px;
+	margin-top: 24px;
+	width: 100%;
 }
 
 .forecast_daily_day {
@@ -161,11 +165,11 @@ button {
 }
 
 .forecast_hourly {
+	background-color: rgba(0, 0, 0, 0.3);
+	border-radius: 15px;
 	gap: 16px;
 	margin-top: 16px;
 	width: 100%;
-	background-color: rgba(0, 0, 0, 0.3);
-	border-radius: 15px;
 }
 
 .forecast_hourly_hour {
@@ -208,4 +212,50 @@ button {
 
 .hidden {
 	display: none;
+}
+
+button {
+	align-items: center;
+	appearance: none;
+	background-color: #fcfcfd;
+	border-radius: 7px;
+	border-width: 0;
+	box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
+		rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
+	-webkit-user-select: none;
+	box-sizing: border-box;
+	color: #36395a;
+	cursor: pointer;
+	display: inline-flex;
+	font-size: 1rem;
+	justify-content: center;
+	line-height: 1;
+	list-style: none;
+	overflow: hidden;
+	padding: 8px 16px;
+	position: relative;
+	text-align: left;
+	text-decoration: none;
+	touch-action: manipulation;
+	transition: box-shadow 0.15s, transform 0.15s;
+	user-select: none;
+	white-space: nowrap;
+	width: 100px;
+	will-change: box-shadow, transform;
+}
+
+button:focus {
+	box-shadow: #d6d6e7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px,
+		rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
+}
+
+button:hover {
+	box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px,
+		rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
+	transform: translateY(-2px);
+}
+
+button:active {
+	box-shadow: #d6d6e7 0 3px 7px inset;
+	transform: translateY(4px);
 }
