@@ -23,11 +23,14 @@ const guiManager = () => {
 	const fetchManager = weatherManager();
 
 	async function loadGUI() {
-		addSearchDiv(content);
-		addDailyStats(content);
-		addUnitsDiv(content);
-		addDailyForecastDiv(content);
-		addHourlyForecastDiv(content);
+		const main = createDiv("main");
+		content.appendChild(main);
+
+		addSearchDiv(main);
+		addDailyStats(main);
+		addUnitsDiv(main);
+		addDailyForecastDiv(main);
+		addHourlyForecastDiv(main);
 		addFooter(content);
 		addListeners();
 

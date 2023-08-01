@@ -14,14 +14,22 @@ body {
 }
 
 .content {
+	display: grid;
+	grid-template-rows: 1fr 60px;
+	height: 100%;
+}
+
+.main {
 	align-items: center;
-	background-image: url("./images/background2.jpg");
-	/* background-position: -300px; */
+	background-image: url("./images/bg.test.jpg");
+	background-position: center;
 	background-size: cover;
 	display: flex;
 	flex-direction: column;
+	flex: 1;
 	height: 100%;
-	padding: 24px;
+	overflow-y: auto;
+	padding: 16px;
 	width: 100%;
 }
 
@@ -30,8 +38,7 @@ body {
 	border-radius: 15px;
 	color: var(--color-white);
 	display: flex;
-	justify-content: space-between;
-	margin-bottom: 8px;
+	justify-content: space-around;
 	width: 100%;
 	padding: 4px;
 }
@@ -92,6 +99,8 @@ body {
 	flex-direction: column;
 	justify-content: center;
 	width: 100%;
+	height: 70px;
+	margin-bottom: 16px;
 }
 
 .search_input {
@@ -99,7 +108,6 @@ body {
 	border-radius: 15px;
 	border: 3px solid var(--color-white);
 	display: flex;
-	margin-bottom: 16px;
 	padding: 8px;
 }
 
@@ -124,8 +132,8 @@ body {
 .temperature_buttons {
 	display: flex;
 	justify-content: space-around;
-	margin-top: 16px;
 	width: 100%;
+	margin: 16px 0;
 }
 
 input {
@@ -138,9 +146,9 @@ input {
 	border-radius: 15px;
 	display: flex;
 	flex-direction: column;
+	flex: 1;
 	gap: 24px;
 	padding: 4px;
-	margin-top: 24px;
 	width: 100%;
 }
 
@@ -148,16 +156,18 @@ input {
 	align-items: center;
 	color: var(--color-white);
 	display: grid;
-	font-size: 1rem;
+	font-size: 1.2rem;
 	font-weight: 600;
 	gap: 16px;
 	grid-template-columns: 2fr 1fr 1fr;
+	justify-items: center;
 }
 
 .forecast_daily_temp_div {
 	align-items: center;
 	display: flex;
 	flex-direction: column;
+	font-size: 1rem;
 }
 
 .forecast_daily_day img {
@@ -167,8 +177,11 @@ input {
 .forecast_hourly {
 	background-color: rgba(0, 0, 0, 0.3);
 	border-radius: 15px;
-	gap: 16px;
-	margin-top: 16px;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	gap: 4px;
+	overflow-y: auto;
 	width: 100%;
 }
 
@@ -177,7 +190,7 @@ input {
 	color: var(--color-white);
 	display: grid;
 	font-size: 1rem;
-	font-weight: 600px;
+	font-weight: 800px;
 	grid-template-columns: 1fr 1fr 1fr;
 	justify-items: center;
 }
@@ -188,14 +201,12 @@ input {
 
 .footer {
 	background-color: var(--color-dark);
-	bottom: 0;
 	color: var(--color-white);
 	display: grid;
 	font-size: 0.9rem;
 	grid-template-columns: 1fr 1fr;
-	left: 0;
+	height: 60px;
 	padding: 8px;
-	position: absolute;
 	width: 100%;
 }
 
@@ -204,6 +215,7 @@ input {
 	align-items: center;
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
 }
 
 .footer img {
