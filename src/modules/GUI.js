@@ -228,7 +228,6 @@ const guiManager = () => {
 	}
 
 	function fillDailyStats(data) {
-		console.log("daily data: ", data);
 		const current_temperature = document.querySelector(
 			".current_temperature"
 		);
@@ -315,7 +314,6 @@ const guiManager = () => {
 	}
 
 	function fillForecastHourly(data) {
-		console.log("Data in: ", data);
 		for (let i = 0; i < number_of_hours; i++) {
 			const hourlyData = data[i];
 			const hourDiv = document.querySelector(`[data-hour="${i + 1}"]`);

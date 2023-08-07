@@ -70,10 +70,6 @@ const weatherManager = () => {
 				dailyData = processDailyData(fetchedData);
 				processForecastData(fetchedData);
 				processHourlyData(fetchedData);
-				console.log("Fetched data: ", fetchedData);
-				console.log(dailyData);
-				console.log(forecastData);
-				console.log("Hourly data: ", hourlyData);
 			} else {
 				console.log("Error: No weather data to process.");
 			}
@@ -153,6 +149,10 @@ const weatherManager = () => {
 				return;
 			}
 
+			if (forecastData.length > 0) {
+				forecastData.length = 0;
+			}
+
 			// Process forecast data
 			forecast.forecastday.forEach((day) => {
 				const forecastDate = day.date;
@@ -170,6 +170,7 @@ const weatherManager = () => {
 					mintemp_f,
 					dailyIcon
 				);
+
 				forecastData.push(dailyForecastData);
 			});
 		}
@@ -186,6 +187,10 @@ const weatherManager = () => {
 			if (!hourData || !Array.isArray(hourData)) {
 				console.log("Error: Forecast data is not available.");
 				return;
+			}
+
+			if (hourlyData.length > 0) {
+				hourlyData.length = 0;
 			}
 
 			for (let i = 0; i < 24; i += 3) {
