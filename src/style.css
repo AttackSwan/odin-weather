@@ -11,19 +11,24 @@ body {
 	height: 100vh;
 	width: 100vw;
 	margin: 0;
+	background-image: url("./images/bg.test.jpg");
+	background-position: center;
+	background-size: cover;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .content {
 	display: grid;
 	grid-template-rows: 1fr 60px;
 	height: 100%;
+	width: 100%;
 }
 
 .main {
 	align-items: center;
-	background-image: url("./images/bg.test.jpg");
-	background-position: center;
-	background-size: cover;
+
 	display: flex;
 	flex-direction: column;
 	flex: 1;
@@ -190,7 +195,7 @@ input {
 	color: var(--color-white);
 	display: grid;
 	font-size: 1rem;
-	font-weight: 800px;
+	font-weight: 800;
 	grid-template-columns: 1fr 1fr 1fr;
 	justify-items: center;
 }
@@ -235,7 +240,7 @@ input {
 
 button {
 	align-items: center;
-	background-color: #ffffff;
+	background-color: var(--color-white);
 	border: 1px solid rgba(0, 0, 0, 0.1);
 	border-radius: 0.25rem;
 	box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
@@ -279,4 +284,106 @@ button:active {
 	box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
 	color: rgba(0, 0, 0, 0.65);
 	transform: translateY(0);
+}
+
+/* TABLETS AND DESKTOPS */
+@media (min-width: 500px) {
+	.content {
+		background-color: rgba(0, 0, 0, 0.3);
+	}
+
+	.daily {
+		justify-content: space-between;
+	}
+
+	.daily,
+	.forecast_daily,
+	.forecast_hourly,
+	.temperature_buttons {
+		background-color: rgba(0, 0, 0, 0);
+		padding: 4px 64px;
+	}
+
+	.current_temperature {
+		font-size: 3rem;
+	}
+
+	.current_location {
+		font-size: 1.8rem;
+		font-weight: 600;
+	}
+
+	.current_time {
+		font-size: 1.5rem;
+	}
+
+	.current_conditions {
+		font-size: 1.2rem;
+	}
+
+	.air_caption {
+		font-size: 1rem;
+		font-weight: 600;
+	}
+
+	.air_icon img {
+		height: 40px;
+		margin-right: 24px;
+	}
+
+	.air_text {
+		font-size: 1.3rem;
+	}
+
+	.temperature_buttons {
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.forecast_daily,
+	.forecast_hourly {
+		flex-direction: row;
+		justify-content: space-between;
+		padding-top: 32px;
+		align-items: flex-end;
+	}
+
+	.forecast_daily_day {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.forecast_day_name {
+		font-size: 1.8rem;
+	}
+
+	.forecast_daily_temp_div {
+		font-size: 1.3rem;
+	}
+
+	.forecast_daily img {
+		height: 64px;
+	}
+
+	.forecast_hourly_hour {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.forecast_hourly_time {
+		font-size: 1.5rem;
+	}
+	.forecast_hourly_temp {
+		font-size: 1.2rem;
+	}
+	.forecast_hourly_hour img {
+		height: 64px;
+	}
+
+	button {
+		font-size: 0.8rem;
+		width: 100px;
+		min-height: 0;
+		padding: 4px;
+	}
 }
